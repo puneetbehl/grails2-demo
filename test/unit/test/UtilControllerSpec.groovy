@@ -9,12 +9,22 @@ import spock.lang.Specification
 @TestFor(UtilController)
 class UtilControllerSpec extends Specification {
 
-    def setup() {
+    void populateValidParams() {
+		params["name"] = "John Doe"
+		params["tags"] = ["one", "two"]
+		params["roles"] = ["admin", "user"]
+		
     }
 
-    def cleanup() {
-    }
 
-    void "test something"() {
+    void "databinding is working on roles but not on tags"() {
+		when:
+		populateValidParams() 
+		controller.index()
+		
+		then:
+		response.text == '{"name":"John Doe","roles":["admin","user"],"tags":["one","two"]}'
+		
     }
+	
 }
